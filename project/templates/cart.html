@@ -1,0 +1,90 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Cart
+{% endblock %}
+
+{% block main %}
+    <div class="container py-5">
+        {% if not total_price %}
+            {% with messages = get_flashed_messages(with_categories=True) %}
+                {% if messages %}
+                    <div class="alert alert-info text-center" role="alert">
+                        {% for category, msg in messages %}
+                            <p>{{msg}}. <a href="{{url_for('shop')}}" class="alert-link">Shop now!</a></p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+        {% else %}
+            {% with messages = get_flashed_messages(with_categories=True) %}
+                {% if messages %}
+                    {% for category, msg in messages %}
+                        <div class="alert alert-{{category}} text-center">
+                            <p>{{msg}}</p>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        {% endif %}
+
+        <h1 class="text-center mb-4">Your Cart</h1>
+
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Album</th>
+                        <th scope="col">Artist</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Subtotal</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in cart_items %}
+                        <tr>
+                            <td>{{loop.index}}</td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <img src="/static/images/{{item.cover}}" alt="{{item.title}}" class="img-thumbnail me-3" style="width: 80px; height: 80px;">
+                                    <span>{{item.title}}</span>
+                                </div>
+                            </td>
+                            <td>{{item.artist}}</td>
+                            <td>
+                                <form action="/update_quantity" method="POST" class="d-flex justify-content-center align-items-center">
+                                    <input type="hidden" name="item_id" value="{{item.id}}">
+                                    <button type="submit" class="btn btn-outline-secondary btn-sm" name="minus">-</button>
+                                    <input type="text" min="1" class="form-control mx-2 text-center" value="{{item.quantity}}" name="quantity" style="width: 60px;">
+                                    <button type="submit" class="btn btn-outline-secondary btn-sm" name="add">+</button>
+                                </form>
+                            </td>
+                            <td>{{item.price | usd}}</td>
+                            <td>{{(item.quantity * item.price) | usd}}</td>
+                            <td>
+                                <form action="/remove_item" method="POST">
+                                    <input type="hidden" name="item_id" value="{{item.id}}">
+                                    <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {% if total_price %}
+            <div class="d-flex justify-content-between align-items-center mt-4">
+                <h3>Total: {{total_price | usd}}</h3>
+                <form action="/checkout" method="GET">
+                    <button type="submit" class="btn btn-primary btn-lg">Proceed to Checkout</button>
+                </form>
+            </div>
+        {% else %}
+            <h3 class="text-center mt-5">Total: $0.00</h3>
+        {% endif %}
+    </div>
+{% endblock %}

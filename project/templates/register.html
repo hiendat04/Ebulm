@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Register
+{% endblock %}
+
+{% block main %}
+    <div class="container mt-5">
+        {% with messages = get_flashed_messages(with_categories=True) %}
+            {% if messages %}
+                <div class="mb-4">
+                    {% for category, msg in messages %}
+                        <div class="alert alert-{{ category }}">{{ msg }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        
+        <h2 class="text-center mb-4">Create Your Account</h2>
+        <form action="/register" method="POST" class="shadow p-4 rounded bg-light">
+            <div class="mb-3">
+                <input autocomplete="off" class="form-control" name="first_name" placeholder="First Name" type="text" required>
+            </div>
+            <div class="mb-3">
+                <input autocomplete="off" class="form-control" name="last_name" placeholder="Last Name" type="text" required>
+            </div>
+            <div class="mb-3">
+                <input autocomplete="off" class="form-control" name="phone" placeholder="Phone" type="text" required>
+            </div>
+            <div class="mb-3">
+                <input autocomplete="off" class="form-control" name="address" placeholder="Address" type="text" required>
+            </div>
+            <div class="mb-3">
+                <input autocomplete="off" class="form-control" name="username" placeholder="Username" type="text" required>
+            </div>
+            <div class="mb-3">
+                <input autocomplete="off" class="form-control" name="password" placeholder="Password" type="password" required>
+            </div>
+            <div class="mb-3">
+                <input autocomplete="off" class="form-control" name="confirmation" placeholder="Confirm Password" type="password" required>
+            </div>
+            <button class="btn btn-primary w-100" type="submit">Register</button>
+        </form>
+        <p class="text-center mt-3">Already have an account? <a href="{{ url_for('login') }}">Log in here</a>.</p>
+    </div>
+{% endblock %}

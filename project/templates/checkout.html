@@ -1,0 +1,78 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Checkout
+{% endblock %}
+
+{% block main %}
+    {% with messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+            {% for category, msg in messages %}
+                <div class="alert alert-{{category}}">
+                    <p>{{msg}}</p>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <p class="h4 text-center">Check Out</p>
+
+    <form action="/checkout" method="POST">
+        <div class="form-group">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-8 order-md-1">
+                        <h4 class="mb-3">Billing Address</h4>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="first_name">First Name</label>
+                                <input type="text" name="first_name" value = {{user.first_name}} class="form-control" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="last_name">Last Name</label>
+                                <input type="text" name="last_name" value = {{user.last_name}} class="form-control" required>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="phone_number">Phone Number</label>
+                            <input type="tel" name="phone_number" value = {{user.phone}} class="form-control" required>
+                        </div>
+        
+                        <div class="mb-3">
+                            <label for="address">Address</label>
+                            <input type="text" name="address" value = {{user.address}} class="form-control" required>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 order-md-2 mb-4">
+                        <h4 class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="text-muted">Your Cart</span>
+                            <span class="badge badge-secondary badge-pill">number</span>
+                        </h4>
+                        <ul class="list-group mb-3"> 
+                            {% for item in cart_items %}
+                                {% if item.order_id == order.id %}
+                                    <li class="list-group-item d-flex justify-content-between lh-condensed">
+                                        <div>
+                                            <h6 class="my-0">{{item.title}}</h6>
+                                            <small class="text-muted">{{item.artist}}</small>
+                                            <small class="text-muted">Quantity: {{item.quantity}}</small>
+                                        </div>
+                                        <span class="text-muted">{{ (item.price * item.quantity) | usd }}</span>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>Total (USD)</span>
+                                <strong>{{total_price | usd}}</strong>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr class="mb-4">
+        <button type="submit" class="btn btn-primary btn-lg btn-block">Proceed to Checkout</button>
+    </form>
+{% endblock %}

@@ -1,0 +1,11 @@
+.carousel-inner .carousel-item.active,
+.carousel-inner .carousel-item-next,
+.carousel-inner .carousel-item-prev{
+    display:flex;
+    margin-right: 3px;
+}
+
+img{
+    height: 286px;
+    width: 286px;
+}

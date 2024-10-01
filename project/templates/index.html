@@ -1,0 +1,76 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Homepage
+{% endblock %}
+
+{% block main %}
+    {% with messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+            {% for category, msg in messages %}
+                <div class="alert alert-{{category}}">
+                    <p>{{msg}}</p>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    
+    <section class="bg-dark text-light text-center py-5">
+        <div class="container">
+            <h1>Welcome to Ebulm</h1>
+            <p>Discover and buy your favourite albums</p>
+            <a href="{{url_for('shop')}}" class="btn btn-primary">Shop now</a>
+        </div>
+    </section>
+
+    <section class="container my-5">
+        <h2 class="text-center mb-4">Featured Albums</h2>
+        <div id="albumCarousel" class="carousel slide" data-ride="carousel">
+            <div class="carousel-inner">
+                {% for album in albums %}
+                <div class="carousel-item {% if loop.first %}active{% endif %}">
+                    <div class="card-wrapper">
+                        <div class="card index" style="width: 20rem;">
+                            <img class="card-img-top" src="/static/images/{{album.cover}}" alt="{{album.title}}">
+                            <div class="card-body">
+                              <h5 class="card-title">{{album.title}}</h5>
+                              <p class="card-text">{{album.artist}}</p>
+                              <p class="card-text">{{album.price | usd}}</p>
+                              <form action="/add_to_cart" method="POST">
+                                <input type="hidden" name="album_id" value="{{album.id}}">
+                                <button type="submit" class="btn btn-primary">Add to Cart</a>
+                              </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <a class="carousel-control-prev" href="#albumCarousel" role="button" data-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#albumCarousel" role="button" data-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="sr-only">Next</span>
+            </a>
+          </div>
+    </section>
+    <script>
+        var items = document.querySelectorAll('.carousel .carousel-item');
+        items.forEach((e)=>{
+            const slide = 3;
+            let next = e.nextElementSibling;
+
+            for(var i = 0; i < slide; i++){
+                if(!next){
+                    next = items[0]
+                }
+                
+                let clonechild = next.cloneNode(true)
+                e.appendChild(clonechild.children[0])
+                next = next.nextElementSibling
+            }
+        })
+    </script>
+{% endblock %}

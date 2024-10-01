@@ -1,0 +1,56 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    History
+{% endblock %}
+
+{% block main %}
+{% with messages = get_flashed_messages(with_categories=True) %}
+{% if messages %}
+    {% for category, msg in messages %}
+        <div class="alert alert-{{category}}">
+            <p>{{msg}}</p>
+        </div>
+    {% endfor %}
+{% endif %}
+{% endwith %}
+
+<div class="container mt-5">
+    <h2 class="text-center">Order History</h2>
+    {% for order in orders %}
+        {% if order.status == "Purchased" %}
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                    <span><b>Order: </b>{{loop.index}}</span>
+                    <span><b>Total Price: </b>{{order.total_price | usd}}</span>
+                    <span><b>Status: </b>{{order.status}}</span>
+                    <span><b>Order Date: </b>{{order.order_date}}</span>
+                    <span><b>Consignee: </b>{{order.first_name}} {{order.last_name}}</span>
+                    <span><b>Address: </b>{{order.address}}</span>
+                    </div>
+                </div>
+                </div>
+            
+                <div class="row">
+                {% for item in items %}
+                    {% if item.order_id == order.id %}
+                        <div class="col-md-3">
+                            <div class="card mb-3">
+                            <img src="/static/images/{{item.cover}}" class="card-img-top" alt="Album Cover">
+                            <div class="card-body">
+                                <h5 class="card-title">{{item.title}}</h5>
+                                <p class="card-text">Artist: {{item.artist}}</p>
+                                <p class="card-text">Label: {{item.label}}</p>
+                                <p class="card-text">Genre: {{item.genre}}</p>
+                            </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %} 
+            </div>
+            <hr class="bg-dark" style="height: 2px; border: none;">
+        {% endif %}
+    {% endfor %}
+</div>
+{% endblock %}
