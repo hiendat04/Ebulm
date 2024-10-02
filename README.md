@@ -1,9 +1,6 @@
 
 # Ebulm: An E-commerce Website for Albums
 
-## Video Demo
-[Here](https://www.youtube.com/watch?v=K28nVW7_2gY)
-
 ## Project Overview
 Ebulm is a Flask-based e-commerce website that allows users to browse, purchase, and manage their albums. The website offers a user-friendly experience for album enthusiasts who want to add albums to their carts, view details, and complete purchases. This project serves as the final submission for CS50x and demonstrates CRUD operations with the integration of an SQLite database, dynamic templating with Jinja, and a Bootstrap-powered frontend for responsiveness.
 
